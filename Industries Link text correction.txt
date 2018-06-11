@@ -1,0 +1,20 @@
+<div class="col-md-3 col-6">
+                            <img alt="Marijuana plant" src="img/matthew-brodeur-rrrr297085-unsplash.jpg">
+                                <h5 class="mb--0">CBD / Medical Marijuana</h5>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <img alt="Ground tumeric" src="img/chinh-le-duc-264152-unsplash.jpg">
+                                <h5 class="mb--0"> Dietary Supplements</h5>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <img alt="Glass medicine vials" src="img/matt-briney-tall160808-unsplash.jpg">
+                                <h5 class="mb--0">Natural Medicines</h5>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <img alt="Oil dropper in woman's hands" src="img/christin-hume-505815-tallunsplash.jpg">
+                                <h5 class="mb--0">Personal Lubricants</h5>
+                            </a>
+                        </div>
