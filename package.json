@@ -1,5 +1,12 @@
-
 {
-  "name": "FDARescuePage",
-  "main": "server.js"
+  "name": "sample-nodejs-pgsql-app",
+  "version": "1.0.0",
+  "description": "Sample Node.js PostgreSQL app for Simple Hosting",
+  "main": "index.js",
+  "engines": {
+    "node": "0.6"
+  },
+  "dependencies": {
+    "pg": "*"
+  }
 }
