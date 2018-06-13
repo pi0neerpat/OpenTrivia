@@ -1,15 +1,23 @@
 {
-  "name": "sample-nodejs-pgsql-app",
+  "name": "fdarescue",
   "version": "1.0.0",
-  "description": "Sample Node.js PostgreSQL app for Simple Hosting",
-  "main": "index.js",
-  "engines": {
-    "node": "0.6"
-  },
+  "description": "",
+  "main": "server.js",
   "dependencies": {
     "connect": "^3.6.6",
-    "pg": "*",
     "serve-static": "^1.13.2",
     "vhost": "^3.0.2"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://GEngineer@bitbucket.org/GEngineer/fdarescue.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/GEngineer/fdarescue#readme"
 }
