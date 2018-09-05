@@ -2,11 +2,14 @@
   "name": "opentrivia",
   "version": "0.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
     "dev": "node server.js"
+  },
+  "engines": {
+    "node": "6.0.0"
   },
   "repository": {
     "type": "git",
