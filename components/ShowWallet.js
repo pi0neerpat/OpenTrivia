@@ -6,7 +6,8 @@ import {
   Header,
   Table,
   Segment,
-  Icon
+  Icon,
+  Message
 } from "semantic-ui-react";
 import { Router } from "../routes";
 import web3 from "../ethereum/web3";
@@ -18,7 +19,8 @@ class ShowWallet extends Component {
     balanceUSD: 0,
     transactions: [],
     walletName: "",
-    upvoteDisabled: true
+    upvoteDisabled: true,
+    errorMessage: ""
   };
 
   renderRows() {
@@ -47,40 +49,51 @@ class ShowWallet extends Component {
   }
 
   handleLoad = async () => {
+    this.setState({ errorMessage: "" });
     const accounts = await web3.eth.getAccounts();
     const wallet = await axios
-      .get(`http://localhost:3001/user/${accounts[0]}`)
+      .get(`https://tranquil-peak-32217.herokuapp.com/user/${accounts[0]}`)
+      // .get(`http://localhost:3001/user/${accounts[0]}`)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         return res.data;
       })
       .catch(function(err) {
-        console.log(err);
+        // console.log(err);
       });
-    let disabled = true;
-    if (wallet.balance > 6) {
-      disabled = false;
+    if (typeof wallet == "undefined") {
+      this.setState({
+        errorMessage:
+          "You don't have a wallet yet. Please register for a game first."
+      });
+    } else {
+      let disabled = true;
+      if (wallet.balance > 6) {
+        disabled = false;
+      }
+      this.setState({
+        balance: wallet.balance,
+        balanceUSD: wallet.balanceUSD,
+        transactions: wallet.transactions,
+        walletName: wallet.user.name,
+        upvoteDisabled: disabled
+      });
     }
-    this.setState({
-      balance: wallet.balance,
-      balanceUSD: wallet.balanceUSD,
-      transactions: wallet.transactions,
-      walletName: wallet.user.name,
-      upvoteDisabled: disabled
-    });
   };
 
-  handleupVote = async () => {
+  handleUpvote = async () => {
     const accounts = await web3.eth.getAccounts();
     // console.log(accounts[0]);
     await axios
-      .patch(`http://localhost:3001/users`, {
+      .patch(`https://tranquil-peak-32217.herokuapp.com/users`, {
+        // .patch(`http://localhost:3001/users`, {
         action_id: 40053,
         from: accounts[0].toLowerCase(),
-        to: this.props.address.toLowerCase()
+        to: this.props.gameAddress.toLowerCase()
       })
       .then(res => {
         console.log(res);
+        Router.replaceRoute(`/games/${this.props.gameAddress}`);
       })
       .catch(function(err) {
         console.log(err.response.data);
@@ -88,7 +101,13 @@ class ShowWallet extends Component {
   };
 
   render() {
-    const { balance, balanceUSD, walletName, upvoteDisabled } = this.state;
+    const {
+      balance,
+      balanceUSD,
+      walletName,
+      upvoteDisabled,
+      errorMessage
+    } = this.state;
     if (!walletName) {
       return (
         <Segment secondary textAlign="center">
@@ -97,12 +116,13 @@ class ShowWallet extends Component {
             Tokens
           </Header>
 
-          <Button animated="fade" onClick={this.handleLoad}>
+          <Button animated="fade" size="tiny" onClick={this.handleLoad}>
             <Button.Content visible>
               Load wallet <Icon name="redo alternate" />
             </Button.Content>
             <Button.Content hidden>MetaMask running?</Button.Content>
           </Button>
+          <Message error hidden={!errorMessage} content={errorMessage} />
         </Segment>
       );
     } else {
@@ -117,11 +137,12 @@ class ShowWallet extends Component {
             Name: <b>{walletName}</b>
             <br />
             Tokens: <b>{balance}</b>
-            <br /> ${balanceUSD}
+            {/* <br /> ${balanceUSD} */}
           </p>
 
           <Button
             compact
+            size="tiny"
             icon
             disabled={upvoteDisabled}
             onClick={this.handleUpvote}

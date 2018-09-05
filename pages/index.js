@@ -50,6 +50,7 @@ class GameIndex extends Component {
       gamePrizes[i] = await web3.utils.fromWei(gameSummary[3]);
       totalPrizes += Number(gamePrizes[i]);
       gameVotes[i] = await axios
+        // .get(`localhost:3001/user/${games[i]}`)
         .get(`https://tranquil-peak-32217.herokuapp.com/user/${games[i]}`)
         .then(res => {
           // console.log(res.data.upVotes);
@@ -87,6 +88,7 @@ class GameIndex extends Component {
     return games.map((game, index) => {
       return (
         <ShowGame
+          key={index}
           address={game}
           name={gameNames[index]}
           gameStarted={gameStarted[index]}
@@ -144,13 +146,12 @@ class GameIndex extends Component {
   renderControls() {
     return (
       <Menu secondary>
-        <Menu.Item header>FILTER:</Menu.Item>
+        <Menu.Item header>Filter:</Menu.Item>
         <Menu.Item>
           <Checkbox
             toggle
             label="Open"
             defaultChecked
-            labelposition="left"
             value="Open"
             onChange={this.handleFilter}
           />
@@ -160,7 +161,6 @@ class GameIndex extends Component {
             toggle
             label="In Progress"
             defaultChecked
-            labelposition="left"
             value="In Progress"
             onChange={this.handleFilter}
           />
@@ -170,7 +170,6 @@ class GameIndex extends Component {
             toggle
             label="Ended"
             defaultChecked
-            labelPosition="left"
             value="Ended"
             onChange={this.handleFilter}
           />

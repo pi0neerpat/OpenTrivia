@@ -26,10 +26,12 @@ class GameShow extends Component {
     const gameSummary = await game.methods.getSummary().call();
 
     const accounts = await web3.eth.getAccounts();
-    const playerSummary = await game.methods.getPlayer(accounts[0]).call();
+    const playerAddress = accounts[0];
+    const playerSummary = await game.methods.getPlayer(playerAddress).call();
 
     const gameVotes = await axios
       .get(
+        // `localhost:3000/user/${props.query.address}`
         `https://tranquil-peak-32217.herokuapp.com/user/${props.query.address}`
       )
       .then(res => {
@@ -39,11 +41,10 @@ class GameShow extends Component {
         console.log(err);
       });
     // console.log(accounts[0], props.query.address);
-    let address = "0x";
-    if (!playerSummary[1]) {
-      address = "0x0";
-    }
-
+    // let address = "0x";
+    // if (!playerSummary[1]) {
+    //   address = "0x0";
+    // }
     return {
       address: props.query.address,
       manager: gameSummary[0],
@@ -55,7 +56,7 @@ class GameShow extends Component {
       gameStarted: gameSummary[6],
       gameEnded: gameSummary[7],
       playerSummary: playerSummary,
-      playerAddress: accounts[0],
+      playerAddress: playerAddress,
       gameVotes: gameVotes
     };
   }
@@ -141,6 +142,9 @@ class GameShow extends Component {
       grandPrize,
       entryFee
     } = this.props;
+    // console.log(JSON.stringify(playerSummary));
+    // console.log(playerAddress);
+    // console.log(address);
     return (
       <Layout>
         <Grid>
@@ -182,7 +186,7 @@ class GameShow extends Component {
             </Grid.Column>
 
             <Grid.Column width={4}>
-              <Grid.Row padded>
+              <Grid.Row>
                 <div>
                   <RegisterForm
                     gameAddress={address}
@@ -198,7 +202,7 @@ class GameShow extends Component {
 
               <Grid.Row>
                 <Divider hidden />
-                <ShowWallet />
+                <ShowWallet gameAddress={address} />
               </Grid.Row>
             </Grid.Column>
           </Grid.Row>

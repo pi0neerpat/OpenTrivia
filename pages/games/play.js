@@ -29,7 +29,8 @@ class GamePlay extends Component {
   state = {
     answer: "",
     errorMessage: "",
-    loading: false
+    loading: false,
+    managerLoading: false
   };
 
   static async getInitialProps(props) {
@@ -42,10 +43,10 @@ class GamePlay extends Component {
       let winner = await game.methods.getPlayer(winnerAddressArray[i]).call();
       winnerNameArray[i] = winner[0];
     }
-
+    const round = Number(gameSummary[10]) + 1;
     // console.log(`player address: ${accounts[0]}`);
     const playerSummary = await game.methods.getPlayer(accounts[0]).call();
-    console.log(accounts[0]);
+    // console.log(accounts[0]);
     return {
       gameAddress: props.query.address,
       manager: gameSummary[0],
@@ -59,7 +60,7 @@ class GamePlay extends Component {
       highScore: gameSummary[8],
       winnerAddressArray: winnerAddressArray,
       winnerNameArray: winnerNameArray,
-      currentRoundIndex: gameSummary[10],
+      currentRoundIndex: round,
       currentQuestion: gameSummary[11],
       playerSummary: playerSummary,
       registered: playerSummary[1],
@@ -72,7 +73,7 @@ class GamePlay extends Component {
     const game = Game(this.props.gameAddress);
     const accounts = await web3.eth.getAccounts();
 
-    event.preventDefault();
+    // event.preventDefault();
     this.setState({ loading: true, errorMessage: "" });
 
     axios
@@ -93,13 +94,12 @@ class GamePlay extends Component {
         from: accounts[0],
         value: null
       });
-      Router.pushRoute("/");
-      //Router.replaceRoute(`/games/${this.props.address}`);
+      // Router.pushRoute("/");
+      this.setState({ loading: false, value: "" });
+      Router.replaceRoute(`/games/${this.props.gameAddress}/play`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
-
-    this.setState({ loading: false, value: "" });
   };
 
   onWithdraw = async event => {
@@ -114,8 +114,8 @@ class GamePlay extends Component {
         from: accounts[0],
         value: null
       });
-      Router.pushRoute("/");
-      //Router.replaceRoute(`/games/${this.props.address}`);
+      // Router.pushRoute("/");
+      Router.replaceRoute(`/games/${this.props.gameAddress}/play`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -127,42 +127,44 @@ class GamePlay extends Component {
     const game = Game(this.props.gameAddress);
     const accounts = await web3.eth.getAccounts();
 
-    event.preventDefault();
-    this.setState({ loading: true, errorMessage: "" });
+    // event.preventDefault();
+    this.setState({ managerLoading: true, errorMessage: "" });
     try {
       const accounts = await web3.eth.getAccounts();
       await game.methods.startRound().send({
         from: accounts[0],
         value: null
       });
-      Router.pushRoute("/");
-      //Router.replaceRoute(`/games/${this.props.address}`);
+      // Router.pushRoute("/");
+      Router.replaceRoute(`/games/${this.props.gameAddress}/play`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
 
-    this.setState({ loading: false, value: "" });
+    this.setState({ managerLoading: false, value: "" });
   };
 
   onEndRound = async event => {
     const game = Game(this.props.gameAddress);
     const accounts = await web3.eth.getAccounts();
 
-    event.preventDefault();
-    this.setState({ errorMessage: "" });
+    // event.preventDefault();
+    this.setState({
+      errorMessage: "",
+      managerLoading: true
+    });
     try {
       const accounts = await web3.eth.getAccounts();
       await game.methods.endRound().send({
         from: accounts[0],
         value: null
       });
-      Router.pushRoute("/");
-      // Router.replaceRoute(`/games/${this.props.gameAddress}`);
+      // Router.pushRoute("/");
+      this.setState({ manangerLoading: false, value: "" });
+      Router.replaceRoute(`/games/${this.props.gameAddress}/play`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
-
-    this.setState({ loading: false, value: "" });
   };
 
   renderSidebar() {
@@ -400,19 +402,42 @@ class GamePlay extends Component {
   }
 
   renderManagerControls() {
-    const { hasStarted, hasEnded } = this.props;
+    const { hasStarted, hasEnded, numRounds, currentRoundIndex } = this.props;
     if (!hasStarted) {
       return (
-        <Button color="green" basic onClick={this.onStartGame}>
+        <Button
+          color="green"
+          basic
+          onClick={this.onStartGame}
+          loading={this.state.managerLoading}
+        >
           Start the Game!
         </Button>
       );
     } else if (!hasEnded) {
-      return (
-        <Button color="blue" basic onClick={this.onEndRound}>
-          Go to the next round!
-        </Button>
-      );
+      if (currentRoundIndex == numRounds) {
+        return (
+          <Button
+            color="red"
+            basic
+            onClick={this.onEndRound}
+            loading={this.state.managerLoading}
+          >
+            End the game
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            color="blue"
+            basic
+            onClick={this.onEndRound}
+            loading={this.state.managerLoading}
+          >
+            Go to the next round
+          </Button>
+        );
+      }
     } else {
       axios
         .patch(`https://tranquil-peak-32217.herokuapp.com/users`, {
@@ -425,9 +450,7 @@ class GamePlay extends Component {
         .catch(function(err) {
           console.log(err);
         });
-      return (
-        <p1>Game complete. Leftover tokens were returned to the manager.</p1>
-      );
+      return <p1>Leftover tokens were returned to the manager.</p1>;
     }
   }
 

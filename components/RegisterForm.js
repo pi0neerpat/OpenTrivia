@@ -28,10 +28,10 @@ class RegisterForm extends Component {
     const game = Game(this.props.gameAddress);
     const entryFee = await game.methods.entryFee().call();
 
-    event.preventDefault();
+    // event.preventDefault();
     this.setState({ loading: true, errorMessage: "" });
 
-    console.log(`This name: ${this.state.name}`);
+    // console.log(`This name: ${this.state.name}`);
     const accounts = await web3.eth.getAccounts();
     axios
       .post(`https://tranquil-peak-32217.herokuapp.com/users`, {
@@ -46,12 +46,12 @@ class RegisterForm extends Component {
       });
     try {
       const accounts = await web3.eth.getAccounts();
-      await game.methods.register("Bob").send({
+      await game.methods.register(this.state.name).send({
         from: accounts[0],
         value: entryFee
       });
       // Router.pushRoute("/");
-      //Router.replaceRoute(`/games/${this.props.address}`);
+      Router.replaceRoute(`/games/${this.props.gameAddress}`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -67,10 +67,10 @@ class RegisterForm extends Component {
       hasEnded,
       entryFee
     } = this.props;
-
+    // console.log(registered);
     if (registered) {
       return (
-        <Segment.Group vertical>
+        <Segment.Group>
           <Segment>
             <Header textAlign="center">
               Registration
@@ -94,7 +94,7 @@ class RegisterForm extends Component {
       let status = "has already started";
       if (hasEnded) status = "has ended";
       return (
-        <Segment.Group vertical>
+        <Segment.Group>
           <Segment>
             <Header textAlign="center">
               Registration
@@ -111,7 +111,7 @@ class RegisterForm extends Component {
       );
     } else {
       return (
-        <Segment.Group vertical>
+        <Segment.Group>
           <Segment>
             <Header textAlign="center">
               Registration
@@ -138,9 +138,7 @@ class RegisterForm extends Component {
                 animated="fade"
                 loading={this.state.loading}
               >
-                <Button.Content labelPosition="right" visible>
-                  Register!
-                </Button.Content>
+                <Button.Content visible>Register!</Button.Content>
                 <Button.Content hidden>MetaMask running?</Button.Content>
               </Button>
             </Form>

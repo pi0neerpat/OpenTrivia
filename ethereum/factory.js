@@ -3,7 +3,7 @@ import GameFactory from "./build/GameFactory.json";
 
 const instance = new web3.eth.Contract(
   JSON.parse(GameFactory.interface),
-  "0x766368f3FE910312007F003728075C8322185a87"
+  "0x94bC90f8a7f79d7Ca88aD48435C6510A8F35944a"
 );
 
 export default instance;

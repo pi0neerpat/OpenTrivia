@@ -77,10 +77,12 @@ contract Game {
 
       var delim = ";".toSlice();
       numRounds = (questions.toSlice().count(delim) + 1);
+      var q=questions.toSlice();
+      var a=answers.toSlice();
       for(uint i = 0; i < numRounds; i++) {
           Round memory newRound = Round({
-          question: questions.toSlice().split(delim).toString(),
-          answer: answers.toSlice().split(delim).toString(),
+          question: q.split(delim).toString(),
+          answer: a.split(delim).toString(),
           started: false,
           complete: false
           });
