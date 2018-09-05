@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "opentrivia",
   "version": "0.2.0",
   "description": "",
@@ -38,4 +39,27 @@
     "truffle-hdwallet-provider": "0.0.5",
     "web3": "^1.0.0-beta.34"
   }
+=======
+  "name": "fdarescue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "^3.6.6",
+    "serve-static": "^1.13.2",
+    "vhost": "^3.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://GEngineer@bitbucket.org/GEngineer/fdarescue.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/GEngineer/fdarescue#readme"
+>>>>>>> c263d083b976d17adf9b7745b1f575b9012ef914
 }
