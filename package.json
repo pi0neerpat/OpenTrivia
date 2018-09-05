@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "prestart": "next build",
     "start": "node server.js",
     "test": "mocha",
     "dev": "node server.js"
