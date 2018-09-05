@@ -4,7 +4,6 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "prestart": "next build",
     "start": "node server.js",
     "test": "mocha",
     "dev": "node server.js"
@@ -16,11 +15,7 @@
     "type": "git",
     "url": ""
   },
-  "keywords": [
-    "trivia",
-    "ethereum",
-    "DApp"
-  ],
+  "keywords": ["trivia", "ethereum", "DApp"],
   "author": "Patrick Gallagher",
   "license": "",
   "bugs": {
