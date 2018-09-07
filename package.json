@@ -9,6 +9,9 @@
     "test": "mocha",
     "dev": "node server.js"
   },
+  "engines": {
+    "node": "9.5.0"
+  },
   "repository": {
     "type": "git",
     "url": ""
@@ -24,7 +27,6 @@
     "url": ""
   },
   "homepage": "",
-  "gypfile": true,
   "dependencies": {
     "axios": "^0.18.0",
     "delay": "^3.0.0",
