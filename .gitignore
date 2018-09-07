@@ -3,6 +3,6 @@ logs
 *.log
 dist
 hidden
-build
+
 .next
 scratchpad
