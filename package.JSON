@@ -9,6 +9,7 @@
     "test": "mocha",
     "dev": "node server.js"
   },
+  "private": false,
   "repository": {
     "type": "git",
     "url": ""
