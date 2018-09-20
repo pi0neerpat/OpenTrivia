@@ -1,4 +1,6 @@
-Note: this is a work in progress! Contributions welcome!
+Note: this is a work in progress- contributions welcome!
+
+A detailed explanation can be found [in this article](https://medium.com/@patluvsblockchain/double-blockchain-dapp-experiment-96f2ac12dc8d)
 
 The theory behind the first "Double-blockchain dApp."
 
