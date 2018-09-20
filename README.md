@@ -1,6 +1,4 @@
-OpenTrivia is live at https://www.OpenTrivia.io
-
-Note: this is a work in progress!
+Note: this is a work in progress! Contributions welcome!
 
 The theory behind the first "Double-blockchain dApp."
 
