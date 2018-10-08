@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
 
 // Server + database configuration (environment variables)
-require("./config/config");
+require("./db/config");
 const port = process.env.PORT;
 var { mongoose } = require("./db/mongoose");
 var { User } = require("./models/user");

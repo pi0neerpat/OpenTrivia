@@ -8,3 +8,4 @@ scratchpad
 npm-debug.log
 .DS_Store
 /*.env
+config.js
