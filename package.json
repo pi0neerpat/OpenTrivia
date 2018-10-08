@@ -4,19 +4,19 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "prestart": "next build",
-    "start": "node server.js",
-    "test": "mocha",
-    "dev": "node server.js"
-  },
-  "engines": {
-    "node": "6.0.0"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "node start-client.js"
   },
   "repository": {
     "type": "git",
     "url": ""
   },
-  "keywords": ["trivia", "ethereum", "DApp"],
+  "keywords": [
+    "trivia",
+    "ethereum",
+    "DApp"
+  ],
   "author": "Patrick Gallagher",
   "license": "",
   "bugs": {
@@ -40,7 +40,10 @@
     "solc": "^0.4.24",
     "supertest": "^3.1.0",
     "truffle-hdwallet-provider": "0.0.5",
-    "web3": "^1.0.0-beta.34",
+    "web3": "0.20.6",
     "webpack": "^4.17.2"
+  },
+  "devDependencies": {
+    "concurrently": "3.1.0"
   }
 }

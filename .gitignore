@@ -3,7 +3,6 @@ logs
 *.log
 dist
 hidden
-.next
 scratchpad
 /node_modules
 npm-debug.log
