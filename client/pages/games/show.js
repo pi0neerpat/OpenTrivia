@@ -21,43 +21,45 @@ import Blockies from "react-blockies";
 
 class GameShow extends Component {
   static async getInitialProps(props) {
-    // getInitialProps gets its own props, which contains the URL address
+    let gameSummary = {};
+    let grandPrize;
+    let entryFee;
+    let playerSummary;
+    let playerAddress;
+    let gameVotes;
+
     const game = Game(props.query.address);
-    const gameSummary = await game.methods.getSummary().call();
-
-    const accounts = await web3.eth.getAccounts();
-    const playerAddress = accounts[0];
-    const playerSummary = await game.methods.getPlayer(playerAddress).call();
-
-    const gameVotes = await axios
-      .get(
-        // `localhost:3000/user/${props.query.address}`
-        `https://tranquil-peak-32217.herokuapp.com/user/${props.query.address}`
-      )
+    gameSummary = await game.methods.getSummary().call();
+    web3.eth.getAccounts().then(accounts => {
+      try {
+        playerAddress = accounts[0];
+        playerSummary = game.methods.getPlayer(playerAddress).call();
+      } catch (err) {}
+    });
+    gameVotes = await axios
+      .get(`/user/${props.query.address}`)
       .then(res => {
         return res.data.upVotes;
       })
       .catch(function(err) {
         console.log(err);
       });
-    // console.log(accounts[0], props.query.address);
-    // let address = "0x";
-    // if (!playerSummary[1]) {
-    //   address = "0x0";
-    // }
+    entryFee = await web3.utils.fromWei(gameSummary[2].toString());
+    grandPrize = await web3.utils.fromWei(gameSummary[3].toString());
+
     return {
-      address: props.query.address,
-      manager: gameSummary[0],
-      description: gameSummary[1],
-      entryFee: await web3.utils.fromWei(gameSummary[2]),
-      grandPrize: await web3.utils.fromWei(gameSummary[3]),
-      numPlayers: gameSummary[4],
-      numRounds: gameSummary[5],
-      gameStarted: gameSummary[6],
-      gameEnded: gameSummary[7],
-      playerSummary: playerSummary,
-      playerAddress: playerAddress,
-      gameVotes: gameVotes
+      address: props.query.address || "",
+      manager: gameSummary[0] || "",
+      description: gameSummary[1] || "",
+      entryFee: entryFee || "",
+      grandPrize: grandPrize || "",
+      numPlayers: gameSummary[4] || "",
+      numRounds: gameSummary[5] || "",
+      gameStarted: gameSummary[6] || "",
+      gameEnded: gameSummary[7] || "",
+      playerSummary: playerSummary || "",
+      playerAddress: playerAddress || "",
+      gameVotes: gameVotes || ""
     };
   }
 

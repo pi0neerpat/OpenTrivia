@@ -4,8 +4,6 @@ const next = require("next");
 const port = process.env.PORT;
 
 const app = next({
-  //specifies production or dev mode
-  // Checks for this variable, if true, then production mode
   dev: process.env.NODE_ENV !== "production"
 });
 

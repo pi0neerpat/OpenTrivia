@@ -53,13 +53,9 @@ class GameIndex extends Component {
         // .get(`localhost:3001/user/${games[i]}`)
         .get(`https://tranquil-peak-32217.herokuapp.com/user/${games[i]}`)
         .then(res => {
-          // console.log(res.data.upVotes);
           return res.data.upVotes;
         })
-        .catch(function(err) {
-          console.log(err);
-        });
-      // console.log(gameVotes[0]);
+        .catch(function(err) {});
     }
     return {
       games: games,
@@ -112,8 +108,6 @@ class GameIndex extends Component {
     if (value === "In Progress") newShowInProgress = !showInProgress;
     if (value === "Ended") newShowEnded = !showEnded;
 
-    console.log(`showOpen changed to: ${newShowOpen}`);
-
     var renderLabelArray = new Array();
     games.map((game, index) => {
       if (newShowOpen === true && gameStarted[index] === false) {
@@ -127,13 +121,6 @@ class GameIndex extends Component {
       } else if (newShowEnded === true && gameEnded[index] === true) {
         renderLabelArray[index] = true;
       } else renderLabelArray[index] = false;
-      console.log(
-        `showOpen: ${newShowOpen} game: ${index} gameStarted: ${
-          gameStarted[index]
-        } gameEnded: ${gameEnded[index]} renderLabel: ${
-          renderLabelArray[index]
-        }`
-      );
     });
     this.setState({
       gameRenderLabel: renderLabelArray,
