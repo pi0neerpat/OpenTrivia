@@ -31,34 +31,44 @@ class GameIndex extends Component {
   };
 
   static async getInitialProps() {
-    const games = await factory.methods.getDeployedGames().call();
-
     let totalPrizes = 0;
-    var gameNames = new Array();
-    var gameStarted = new Array();
-    var gameVotes = new Array();
-    var gameFees = new Array();
-    var gamePrizes = new Array();
-    var gameEnded = new Array();
-    for (var i = 0; i < games.length; i++) {
-      let game = Game(games[i]);
-      let gameSummary = await game.methods.getSummary().call();
-      gameNames[i] = gameSummary[1];
-      gameStarted[i] = gameSummary[6];
-      gameEnded[i] = gameSummary[7];
-      gameFees[i] = await web3.utils.fromWei(gameSummary[2]);
-      gamePrizes[i] = await web3.utils.fromWei(gameSummary[3]);
-      totalPrizes += Number(gamePrizes[i]);
-      gameVotes[i] = await axios
-        // .get(`localhost:3001/user/${games[i]}`)
-        .get(`https://tranquil-peak-32217.herokuapp.com/user/${games[i]}`)
-        .then(res => {
-          return res.data.upVotes;
-        })
-        .catch(function(err) {});
+    var gameNames = [];
+    var gameStarted = [];
+    var gameVotes = [];
+    var gameFees = [];
+    var gamePrizes = [];
+    var gameEnded = [];
+    var gameAddresses = ["0x"];
+
+    const gameAddresses = await factory.methods
+      .getDeployedGames()
+      .call()
+      .catch(err => console.log(err));
+
+    if (gameAddresses !== undefined && gameAddresses.length > 0) {
+      for (var i = 0; i < gameAddresses.length; i++) {
+        let game = Game(gameAddresses[i]);
+        let gameSummary = await game.methods.getSummary().call();
+        gameNames[i] = gameSummary[1];
+        gameStarted[i] = gameSummary[6];
+        gameEnded[i] = gameSummary[7];
+        gameFees[i] = await web3.utils.fromWei(gameSummary[2]);
+        gamePrizes[i] = await web3.utils.fromWei(gameSummary[3]);
+        totalPrizes += Number(gamePrizes[i]);
+        gameVotes[i] = await axios
+          // .get(`localhost:3001/user/${games[i]}`)
+          .get(
+            `https://tranquil-peak-32217.herokuapp.com/user/${gameAddresses[i]}`
+          )
+          .then(res => {
+            return res.data.upVotes;
+          })
+          .catch(function(err) {});
+      }
     }
+
     return {
-      games: games,
+      gameAddresses,
       gameNames,
       gameStarted,
       gameEnded,
@@ -72,7 +82,7 @@ class GameIndex extends Component {
 
   renderGames() {
     const {
-      games,
+      gameAddresses,
       gameNames,
       gameStarted,
       gameVotes,
@@ -81,7 +91,7 @@ class GameIndex extends Component {
       gameEnded
     } = this.props;
 
-    return games.map((game, index) => {
+    return gameAddresses.map((game, index) => {
       return (
         <ShowGame
           key={index}
@@ -99,7 +109,7 @@ class GameIndex extends Component {
   }
 
   handleFilter = (e, { value }) => {
-    const { games, gameStarted, gameEnded } = this.props;
+    const { gameAddresses, gameStarted, gameEnded } = this.props;
     const { showOpen, showInProgress, showEnded } = this.state;
     let newShowOpen = showOpen;
     let newShowInProgress = showInProgress;
@@ -109,7 +119,7 @@ class GameIndex extends Component {
     if (value === "Ended") newShowEnded = !showEnded;
 
     var renderLabelArray = new Array();
-    games.map((game, index) => {
+    gameAddresses.map((game, index) => {
       if (newShowOpen === true && gameStarted[index] === false) {
         renderLabelArray[index] = true;
       } else if (

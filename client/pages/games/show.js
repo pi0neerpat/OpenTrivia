@@ -28,14 +28,6 @@ class GameShow extends Component {
     let playerAddress;
     let gameVotes;
 
-    const game = Game(props.query.address);
-    gameSummary = await game.methods.getSummary().call();
-    web3.eth.getAccounts().then(accounts => {
-      try {
-        playerAddress = accounts[0];
-        playerSummary = game.methods.getPlayer(playerAddress).call();
-      } catch (err) {}
-    });
     gameVotes = await axios
       .get(`/user/${props.query.address}`)
       .then(res => {
@@ -44,8 +36,16 @@ class GameShow extends Component {
       .catch(function(err) {
         console.log(err);
       });
-    entryFee = await web3.utils.fromWei(gameSummary[2].toString());
-    grandPrize = await web3.utils.fromWei(gameSummary[3].toString());
+    try {
+      const game = Game(props.query.address);
+      gameSummary = await game.methods.getSummary().call();
+      web3.eth.getAccounts().then(accounts => {
+        playerAddress = accounts[0];
+        playerSummary = game.methods.getPlayer(playerAddress).call();
+      });
+      entryFee = await web3.utils.fromWei(gameSummary[2].toString());
+      grandPrize = await web3.utils.fromWei(gameSummary[3].toString());
+    } catch (err) {}
 
     return {
       address: props.query.address || "",
